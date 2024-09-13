@@ -1,0 +1,11 @@
+### post_unUser
+POST http://localhost:8080/invoices?user_id=unUser&amount=500
+Accept: application/json
+
+### post_dosUser
+POST http://localhost:8080/invoices?user_id=dosUser&amount=222
+Accept: application/json
+
+### get
+GET http://localhost:8080/invoices
+Accept: application/json
