@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>First Thymeleaf Template</title>
+</head>
+<body>
+<h1>This is it!!!</h1>
+<p>Here it is</p>
+<p>Your username is: <span th:text="${username}" th:remove="tag">[Username]</span></p>
+<p>Current time: <span th:text="${#temporals.format(currentDate,'dd-MM-yyy HH:mm')}">[currentDate]</span></p>
+<div th:if="${username.startsWith('z')}">Your name starts with a lowercase Z</div>
+</body>
+</html>
