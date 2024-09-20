@@ -1,11 +1,21 @@
 ### post_unUser
-POST http://localhost:8080/invoices?user_id=unUser&amount=500
+POST http://localhost:8080/invoices?amount=22&user_id=
 Accept: application/json
+Content-Type: application/json
 
-### post_dosUser
-POST http://localhost:8080/invoices?user_id=dosUser&amount=222
+### post_bad
+POST http://localhost:8080/invoices
 Accept: application/json
+Content-Type: application/json
+
+{"amount": 7,
+  "user_id": " "
+}
 
 ### get
 GET http://localhost:8080/invoices
 Accept: application/json
+
+### get_any
+GET http://localhost:8080/invoices
+Accept: */*
