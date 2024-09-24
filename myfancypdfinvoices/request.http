@@ -1,5 +1,5 @@
 ### post_unUser
-POST http://localhost:8080/invoices?amount=22&user_id=
+POST http://localhost:8080/invoices?amount=22&user_id=si
 Accept: application/json
 Content-Type: application/json
 
@@ -9,7 +9,7 @@ Accept: application/json
 Content-Type: application/json
 
 {"amount": 7,
-  "user_id": " "
+  "user_id": "pera"
 }
 
 ### get
