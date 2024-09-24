@@ -1,0 +1,25 @@
+### post_unUser
+POST http://localhost:8080/invoices?amount=22&user_id=si
+Accept: application/json
+Content-Type: application/json
+
+### post_bad
+POST http://localhost:8080/invoices
+Accept: application/json
+Content-Type: application/json
+
+{"amount": 7,
+  "user_id": "pera"
+}
+
+### get
+GET http://localhost:8080/invoices
+Accept: application/json
+
+### get_any
+GET http://localhost:8080/invoices
+Accept: */*
+
+### get_xml
+GET http://localhost:8080/invoices
+Accept: application/xml
