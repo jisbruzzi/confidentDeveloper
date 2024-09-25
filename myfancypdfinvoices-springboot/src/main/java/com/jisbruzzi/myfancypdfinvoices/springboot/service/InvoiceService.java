@@ -1,6 +1,7 @@
 package com.jisbruzzi.myfancypdfinvoices.springboot.service;
 
 import com.jisbruzzi.myfancypdfinvoices.springboot.model.Invoice;
+import com.jisbruzzi.myfancypdfinvoices.springboot.repository.InvoiceRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,10 +22,15 @@ public class InvoiceService {
 	private UserService userService;
 	private JdbcTemplate jdbcTemplate;
 
-	public InvoiceService(UserService userService, @Value("${cdn.url}") String cdnUrl, JdbcTemplate jdbcTemplate) {
+	private InvoiceRepository invoiceRepository;
+
+	public InvoiceService(UserService userService, @Value("${cdn.url}") String cdnUrl, JdbcTemplate jdbcTemplate,
+			InvoiceRepository invoiceRepository
+	) {
 		this.userService = userService;
 		this.cdnUrl = cdnUrl;
 		this.jdbcTemplate = jdbcTemplate;
+		this.invoiceRepository = invoiceRepository;
 	}
 
 	@PostConstruct
@@ -38,43 +44,24 @@ public class InvoiceService {
 	}
 
 	@Transactional
-	public List<Invoice> findAll() {
-		System.out.println("Is a database transaction open? = " + TransactionSynchronizationManager.isActualTransactionActive());
-		return jdbcTemplate.query("select id, user_id, pdf_url, amount from invoices", (resultSet, rowNum) -> {
-			Invoice invoice = new Invoice();
-			invoice.setId(resultSet.getObject("id").toString());
-			invoice.setPdfUrl(resultSet.getString("pdf_url"));
-			invoice.setUserId(resultSet.getString("user_id"));
-			invoice.setAmount(resultSet.getInt("amount"));
-			return invoice;
-		});
+	public Iterable<Invoice> findAll() {
+		return invoiceRepository.findAll();
 	}
 
 	@Transactional
 	public Invoice create(String userId, Integer amount) {
-		System.out.println("Is a database transaction open? = " + TransactionSynchronizationManager.isActualTransactionActive());
 		String generatedPdfUrl = cdnUrl + "/images/default/sample.pdf";
 
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-
-		jdbcTemplate.update(connection -> {
-			PreparedStatement ps = connection
-					.prepareStatement("insert into invoices (user_id, pdf_url, amount) values (?, ?, ?)",
-							Statement.RETURN_GENERATED_KEYS);
-			ps.setString(1, userId);  //
-			ps.setString(2, generatedPdfUrl);
-			ps.setInt(3, amount);
-			return ps;
-		}, keyHolder);
-
-		String uuid = !keyHolder.getKeys().isEmpty() ? keyHolder.getKeys().values().iterator().next().toString()
-				: null;
-
 		Invoice invoice = new Invoice();
-		invoice.setId(uuid);
 		invoice.setPdfUrl(generatedPdfUrl);
 		invoice.setAmount(amount);
 		invoice.setUserId(userId);
-		return invoice;
+
+		return invoiceRepository.save(invoice);
+	}
+
+	@Transactional
+	public Iterable<Invoice> getByUserId(String userId) {
+		return invoiceRepository.findByUserId(userId);
 	}
 }

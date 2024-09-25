@@ -3,13 +3,13 @@ POST http://localhost:8080/invoices?amount=22&user_id=si
 Accept: application/json
 Content-Type: application/json
 
-### post_bad
+### post_good
 POST http://localhost:8080/invoices
 Accept: application/json
 Content-Type: application/json
 
-{"amount": 7,
-  "user_id": "pera"
+{"amount": 12,
+  "user_id": "mzn"
 }
 
 ### get
